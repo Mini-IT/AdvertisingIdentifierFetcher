@@ -1,0 +1,20 @@
+{
+  "unity": "2017.1", 
+  "dependencies": {
+  }, 
+  "author": {
+    "name": "Mini IT LLC",
+    "url": "http://snipeserver.com"
+  }, 
+  "displayName": "Advertising Identifier Fetcher", 
+  "keywords": [
+    "Advertising", 
+    "AdvertisingId", 
+    "Identifier", 
+    "Id",
+    "Android"
+  ], 
+  "description": "Advertising Identifier Fetcher. Uses Google Play AdvertisingIdClient", 
+  "version": "1.0.0", 
+  "name": "com.miniit.advertising-id"
+}

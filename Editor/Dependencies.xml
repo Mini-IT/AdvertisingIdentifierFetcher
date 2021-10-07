@@ -1,0 +1,5 @@
+<dependencies>
+  <androidPackages>
+	<androidPackage spec="com.google.android.gms:play-services-ads-identifier:16.0.0" />
+  </androidPackages>
+</dependencies>
