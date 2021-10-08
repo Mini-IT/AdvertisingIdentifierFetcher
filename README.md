@@ -7,7 +7,7 @@ Forum [thread #1](https://forum.unity.com/threads/application-requestadvertising
 This package uses [AdvertisingIdClient](https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient)
 
 ### Usage
-```
+```csharp
 MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId(advertisingId =>
 {
 	Debug.Log("advertisingId = " + advertisingId);
