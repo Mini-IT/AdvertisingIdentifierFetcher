@@ -22,7 +22,7 @@ namespace MiniIT.Utils
 			var fetcher = new AndroidJavaObject("com.miniit.android.AdvertisingIdFetcher");
 			fetcher.Call("requestAdvertisingId", new AdvertisingIdPluginCallback(OnAdvertisingIdReceived));
 #else
-			Application.RequestAdvertisingIdAsync(OnAdvertisingIdReceived);
+			Application.RequestAdvertisingIdentifierAsync(OnAdvertisingIdReceived);
 #endif
 		}
 
