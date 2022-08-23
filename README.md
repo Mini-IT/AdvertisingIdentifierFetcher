@@ -13,3 +13,9 @@ MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId(advertisingId =>
 	Debug.Log("advertisingId = " + advertisingId);
 });
 ```
+
+### Installation
+To add AdvertisingIdFetcher to your project follow these [instructions](https://docs.unity3d.com/Manual/upm-ui-giturl.html) using this Git URL:
+```
+https://github.com/Mini-IT/AdvertisingIdentifierFetcher.git
+```
