@@ -13,3 +13,19 @@ MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId(advertisingId =>
 	Debug.Log("advertisingId = " + advertisingId);
 });
 ```
+
+### Installation
+To add AdvertisingIdFetcher to your project follow these [instructions](https://docs.unity3d.com/Manual/upm-ui-giturl.html) using this Git URL:
+```
+https://github.com/Mini-IT/AdvertisingIdentifierFetcher.git
+```
+
+#### Resolving dependencies
+[External Dependency Manager for Unity](https://developers.google.com/unity/archive#external_dependency_manager_for_unity) will help you to resolve dependencies.
+
+Or alternatively you can do it manually following these steps:
+- Create custom main gradle template file. Project Settings -> Player -> Android Tab -> Publish Settings -> Custom Main Gradle Template Tick;
+- Open Assets/Plugins/Android/mainTemplate.gradle with any text editor and add the following line into `dependencies` section:
+```
+implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
+```
