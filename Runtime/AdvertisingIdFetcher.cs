@@ -25,7 +25,7 @@ namespace MiniIT.Utils
 			
 #if UNITY_EDITOR
 			OnAdvertisingIdReceived("0000-0000-0000-0000");
-#elif UNITY_ANDROID && UNITY_2020_1_OR_NEWER && !AMAZON_STORE
+#elif UNITY_ANDROID && UNITY_2020_1_OR_NEWER
 			var fetcher = new AndroidJavaObject("com.miniit.android.AdvertisingIdFetcher");
 			fetcher.Call("requestAdvertisingId", new AdvertisingIdPluginCallback(OnAdvertisingIdReceived), timeoutMilliseconds);
 #else
@@ -44,7 +44,7 @@ namespace MiniIT.Utils
 		}
 	}
 
-#if UNITY_ANDROID && UNITY_2020_1_OR_NEWER && !AMAZON_STORE
+#if UNITY_ANDROID && UNITY_2020_1_OR_NEWER
 	public class AdvertisingIdPluginCallback : AndroidJavaProxy
 	{
 		private Action<string> _callback;
