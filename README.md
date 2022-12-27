@@ -37,6 +37,6 @@ implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
 
 Advertising Identifier Fetcher uses conditional compilation. On any other platform but Android [Application.RequestAdvertisingIdentifierAsync](https://docs.unity3d.com/ScriptReference/Application.RequestAdvertisingIdentifierAsync.html) will be used.
 
-### Amazone app store
+### Amazon app store
 
-In Amazone app store no Google services are available and Google advertising id is not available. Advertising Identifier Fetcher uses conditional compilation for this case. Define custom preprocessor symbol `AMAZON_STORE`. In this case Unity's [Application.RequestAdvertisingIdentifierAsync](https://docs.unity3d.com/ScriptReference/Application.RequestAdvertisingIdentifierAsync.html) will be used.
+In Amazon app store no Google services are available and Google advertising id is not available. Advertising Identifier Fetcher uses conditional compilation for this case. Define custom preprocessor symbol `AMAZON_STORE`. In this case Unity's [Application.RequestAdvertisingIdentifierAsync](https://docs.unity3d.com/ScriptReference/Application.RequestAdvertisingIdentifierAsync.html) will be used.
