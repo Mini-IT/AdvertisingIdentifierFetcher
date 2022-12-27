@@ -13,6 +13,9 @@ MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId(advertisingId =>
 	Debug.Log("advertisingId = " + advertisingId);
 });
 ```
+Optionally you may specify a timeout in milliseconds for this operation by passing the second parameter. **Default timeout is 1000 ms**. If the operation lasts longer, it is forced to stop and the `callback` will be called with an empty string as a parameter.
+
+If the timeout value is less or equal to zero, no timeout is applied.
 
 ### Installation
 To add AdvertisingIdFetcher to your project follow these [instructions](https://docs.unity3d.com/Manual/upm-ui-giturl.html) using this Git URL:
@@ -29,3 +32,11 @@ Or alternatively you can do it manually following these steps:
 ```
 implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
 ```
+
+### Android only
+
+Advertising Identifier Fetcher uses conditional compilation. On any other platform but Android [Application.RequestAdvertisingIdentifierAsync](https://docs.unity3d.com/ScriptReference/Application.RequestAdvertisingIdentifierAsync.html) will be used.
+
+### Amazone app store
+
+In Amazone app store no Google services are available and Google advertising id is not available. Advertising Identifier Fetcher uses conditional compilation for this case. Define custom preprocessor symbol `AMAZON_STORE`. In this case Unity's [Application.RequestAdvertisingIdentifierAsync](https://docs.unity3d.com/ScriptReference/Application.RequestAdvertisingIdentifierAsync.html) will be used.

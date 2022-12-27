@@ -5,16 +5,20 @@ import com.unity3d.player.UnityPlayer;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 //import androidx.ads.identifier.AdvertisingIdClient;
 //import androidx.ads.identifier.AdvertisingIdInfo;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import java.lang.Exception;
+import java.lang.Runnable;
 
 public class AdvertisingIdFetcher
 {
 	private AdvertisingIdCallback callback;
+	private Handler handler;
+	private TaskCanceler taskCanceler;
 	
-	public void requestAdvertisingId(AdvertisingIdCallback callback)
+	public void requestAdvertisingId(AdvertisingIdCallback callback, int timeoutMilliseconds)
 	{
 		if (callback == null)
 			return;
@@ -29,7 +33,35 @@ public class AdvertisingIdFetcher
 
 		this.callback = callback;
 		
-		new GetAdIdTask(context).execute();
+		GetAdIdTask task = new GetAdIdTask(context);
+		
+		if (timeoutMilliseconds > 0)
+		{
+			taskCanceler = new TaskCanceler(task);
+			
+			handler = new Handler();
+			handler.postDelayed(taskCanceler, timeoutMilliseconds);
+		}
+
+		task.execute();
+	}
+	
+	public void dispose()
+	{
+		if (taskCanceler != null && handler != null)
+		{
+			handler.removeCallbacks(taskCanceler);
+		}
+		handler = null;
+		taskCanceler = null;
+		callback = null;
+	}
+	
+	private void finish(String adid)
+	{
+		if (callback != null)
+			callback.onResult(adid);
+		dispose();
 	}
 	
 	private class GetAdIdTask extends AsyncTask<String, Integer, String>
@@ -64,7 +96,9 @@ public class AdvertisingIdFetcher
 			}
 			
 			if (adInfo != null)
+			{
 				return adInfo.getId();
+			}
 			
 			return "";
 		}
@@ -72,8 +106,27 @@ public class AdvertisingIdFetcher
 		@Override
 		protected void onPostExecute(String adid)
 		{
-			if (callback != null)
-				callback.onResult(adid);
+			finish(adid);
+		}
+	}
+	
+	public class TaskCanceler implements Runnable
+	{
+		private AsyncTask task;
+
+		public TaskCanceler(AsyncTask task)
+		{
+			this.task = task;
+		}
+
+		@Override
+		public void run()
+		{
+			if (task.getStatus() == AsyncTask.Status.RUNNING)
+			{
+				task.cancel(true);
+				finish("");
+			}
 		}
 	}
 }
