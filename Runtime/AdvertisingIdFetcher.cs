@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace MiniIT.Utils
 {
 	public class AdvertisingIdFetcher
 	{
+		private CancellationTokenSource _timeoutCancellation;
+
 		/// <summary>
 		/// Asyncronously requests an advertising id.
 		/// </summary>
@@ -29,18 +33,49 @@ namespace MiniIT.Utils
 			var fetcher = new AndroidJavaObject("com.miniit.android.AdvertisingIdFetcher");
 			fetcher.Call("requestAdvertisingId", new AdvertisingIdPluginCallback(OnAdvertisingIdReceived), timeoutMilliseconds);
 #else
+			if (timeoutMilliseconds > 0)
+			{
+				_timeoutCancellation = new CancellationTokenSource();
+				WaitForResponse(timeoutMilliseconds, _timeoutCancellation.Token);
+			}
+
 			Application.RequestAdvertisingIdentifierAsync(OnAdvertisingIdReceived);
 #endif
+		}
+
+		private async void WaitForResponse(int timeoutMilliseconds, CancellationToken cancellationToken)
+		{
+			try
+			{
+				await Task.Delay(timeoutMilliseconds, cancellationToken);
+			}
+			catch (OperationCanceledException)
+			{
+				// it's ok, the operation finished in time
+				return;
+			}
+
+			Debug.Log($"[AdvertisingIdFetcher] Cancelled by timeout");
+			OnAdvertisingIdReceived(string.Empty);
 		}
 
 		private void OnAdvertisingIdReceived(string advertisingId)
 		{
 			_callback?.Invoke(advertisingId);
+			_callback = null;
 		}
 
 		private void OnAdvertisingIdReceived(string advertisingId, bool trackingEnabled, string errorMsg)
 		{
+			if (_timeoutCancellation != null)
+			{
+				_timeoutCancellation.Cancel();
+				_timeoutCancellation.Dispose();
+				_timeoutCancellation = null;
+			}
+
 			_callback?.Invoke(advertisingId);
+			_callback = null;
 		}
 	}
 
