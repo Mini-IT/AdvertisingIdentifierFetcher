@@ -15,6 +15,6 @@
     "Android"
   ], 
   "description": "Advertising Identifier Fetcher. Uses Google Play AdvertisingIdClient", 
-  "version": "1.2.0", 
+  "version": "1.2.0 dev", 
   "name": "com.miniit.advertising-id"
 }
