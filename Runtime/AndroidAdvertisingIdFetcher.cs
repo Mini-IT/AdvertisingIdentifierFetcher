@@ -46,12 +46,15 @@ namespace MiniIT.Utils
 			string advertisingID = "";
 			try
 			{
-				AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-				AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-				AndroidJavaClass adIdClientClass = new AndroidJavaClass("com.google.android.gms.ads.identifier.AdvertisingIdClient");
-				AndroidJavaObject adIdInfo = adIdClientClass.CallStatic<AndroidJavaObject>("getAdvertisingIdInfo", currentActivity);
+				if (AndroidJNI.AttachCurrentThread() == 0)
+				{
+					AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+					AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+					AndroidJavaClass adIdClientClass = new AndroidJavaClass("com.google.android.gms.ads.identifier.AdvertisingIdClient");
+					AndroidJavaObject adIdInfo = adIdClientClass.CallStatic<AndroidJavaObject>("getAdvertisingIdInfo", currentActivity);
 
-				advertisingID = adIdInfo.Call<string>("getId").ToString();
+					advertisingID = adIdInfo.Call<string>("getId").ToString();
+				}
 			}
 			catch (Exception e)
 			{
