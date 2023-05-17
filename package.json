@@ -1,6 +1,6 @@
 {
 	"name": "com.miniit.advertising-id",
-	"version": "0.0.0",
+	"version": "1.2.0-dev",
 	"dependencies": {
 	},
 	"unity": "2020.1", 
