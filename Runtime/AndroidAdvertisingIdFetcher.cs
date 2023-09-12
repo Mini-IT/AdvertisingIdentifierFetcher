@@ -7,7 +7,7 @@ namespace MiniIT.Utils
 {
 	internal class AndroidAdvertisingIdFetcher
 	{
-		public static void Fetch(Action<string> callback, int timeoutMilliseconds)
+		public static void Fetch(Application.AdvertisingIdentifierCallback callback, int timeoutMilliseconds)
 		{
 			if (timeoutMilliseconds > 0)
 			{
@@ -15,14 +15,15 @@ namespace MiniIT.Utils
 			}
 			else
 			{
-				string adId = GetAndroidAdvertisingId();
-				callback?.Invoke(adId);
+				var result = GetAndroidAdvertisingId();
+				callback?.Invoke(result.advertisingId, result.trackingEnabled, result.errorMsg);
 			}
 		}
 
-		private static async void GetAdvertisingIdAsync(Action<string> callback, int timeoutMilliseconds)
+		private static async void GetAdvertisingIdAsync(Application.AdvertisingIdentifierCallback callback, int timeoutMilliseconds)
 		{
-			string result = "";
+			var result = new AdvertisingIdFetcherResult();
+
 			var cancellation = new CancellationTokenSource();
 			if (timeoutMilliseconds > 0)
 			{
@@ -35,15 +36,17 @@ namespace MiniIT.Utils
 			}
 			catch (OperationCanceledException)
 			{
+				result.errorMsg = "Cancelled by timeout";
 				Debug.Log($"[{nameof(AdvertisingIdFetcher)}] Cancelled by timeout");
 			}
 
-			callback?.Invoke(result);
+			callback?.Invoke(result.advertisingId, result.trackingEnabled, result.errorMsg);
 		}
 
-		public static string GetAndroidAdvertisingId()
+		private static AdvertisingIdFetcherResult GetAndroidAdvertisingId()
 		{
-			string advertisingID = "";
+			var result = new AdvertisingIdFetcherResult();
+
 			try
 			{
 				if (AndroidJNI.AttachCurrentThread() == 0)
@@ -53,14 +56,17 @@ namespace MiniIT.Utils
 					AndroidJavaClass adIdClientClass = new AndroidJavaClass("com.google.android.gms.ads.identifier.AdvertisingIdClient");
 					AndroidJavaObject adIdInfo = adIdClientClass.CallStatic<AndroidJavaObject>("getAdvertisingIdInfo", currentActivity);
 
-					advertisingID = adIdInfo.Call<string>("getId").ToString();
+					result.advertisingId = adIdInfo.Call<string>("getId").ToString();
+					result.trackingEnabled = adIdInfo.Call<bool>("isLimitAdTrackingEnabled");
 				}
 			}
 			catch (Exception e)
 			{
+				result.errorMsg = e.Message;
 				Debug.Log($"[{nameof(AdvertisingIdFetcher)}] Failed to get android advertising ID: {e}");
 			}
-			return advertisingID;
+
+			return result;
 		}
 	}
 }

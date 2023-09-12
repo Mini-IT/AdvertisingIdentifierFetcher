@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UnityEngine;
 
 namespace MiniIT.Utils
 {
@@ -11,7 +11,7 @@ namespace MiniIT.Utils
 		/// or an empty string if the request is failed or interrupted by timeout</param>
 		/// <param name="timeoutMilliseconds">Value <= 0 means no timeout. If the operation lasts more than this much milliseconds,
 		/// it is forced to stop and the <c>callback</c> will be called with an empty string as a parameter</param>
-		public static void RequestAdvertisingId(Action<string> callback, int timeoutMilliseconds = 1000)
+		public static void RequestAdvertisingId(Application.AdvertisingIdentifierCallback callback, int timeoutMilliseconds = 1000)
 		{
 #if UNITY_EDITOR
 			DummyAdvertisingIdFetcher.Fetch(callback, timeoutMilliseconds);

@@ -7,7 +7,7 @@ namespace MiniIT.Utils
 {
 	internal class UnityAdvertisingIdFetcher
 	{
-		public static void Fetch(Action<string> callback, int timeoutMilliseconds)
+		public static void Fetch(Application.AdvertisingIdentifierCallback callback, int timeoutMilliseconds)
 		{
 			if (timeoutMilliseconds > 0)
 			{
@@ -15,16 +15,14 @@ namespace MiniIT.Utils
 			}
 			else
 			{
-				Application.RequestAdvertisingIdentifierAsync((string advertisingId, bool trackingEnabled, string errorMsg) =>
-				{
-					callback?.Invoke(advertisingId);
-				});
+				Application.RequestAdvertisingIdentifierAsync(callback);
 			}
 		}
 
-		private static async void GetAdvertisingIdAsync(Action<string> callback, int timeoutMilliseconds)
+		private static async void GetAdvertisingIdAsync(Application.AdvertisingIdentifierCallback callback, int timeoutMilliseconds)
 		{
-			string result = "";
+			var result = new AdvertisingIdFetcherResult();
+
 			var cancellation = new CancellationTokenSource();
 			if (timeoutMilliseconds > 0)
 			{
@@ -33,7 +31,10 @@ namespace MiniIT.Utils
 			
 			Application.RequestAdvertisingIdentifierAsync((string advertisingId, bool trackingEnabled, string errorMsg) =>
 			{
-				result = advertisingId;
+				result.advertisingId = advertisingId;
+				result.trackingEnabled = trackingEnabled;
+				result.errorMsg = errorMsg;
+
 				if (!cancellation.IsCancellationRequested)
 				{
 					cancellation.Cancel();
@@ -54,7 +55,7 @@ namespace MiniIT.Utils
 				}
 			}
 			
-			callback?.Invoke(result);
+			callback?.Invoke(result.advertisingId, result.trackingEnabled, result.errorMsg);
 		}
 	}
 }

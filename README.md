@@ -8,7 +8,7 @@ This package uses [AdvertisingIdClient](https://developers.google.com/android/re
 
 ### Usage
 ```csharp
-MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId(advertisingId =>
+MiniIT.Utils.AdvertisingIdFetcher.RequestAdvertisingId((advertisingId, trackingEnabled, error) =>
 {
 	Debug.Log("advertisingId = " + advertisingId);
 });
