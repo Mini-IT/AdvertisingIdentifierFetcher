@@ -57,7 +57,7 @@ namespace MiniIT.Utils
 					AndroidJavaObject adIdInfo = adIdClientClass.CallStatic<AndroidJavaObject>("getAdvertisingIdInfo", currentActivity);
 
 					result.advertisingId = adIdInfo.Call<string>("getId").ToString();
-					result.trackingEnabled = adIdInfo.Call<bool>("isLimitAdTrackingEnabled");
+					result.trackingEnabled = !adIdInfo.Call<bool>("isLimitAdTrackingEnabled");
 				}
 			}
 			catch (Exception e)
