@@ -63,7 +63,8 @@ namespace MiniIT.Utils
 			catch (Exception e)
 			{
 				result.errorMsg = e.Message;
-				Debug.Log($"[{nameof(AdvertisingIdFetcher)}] Failed to get android advertising ID: {e}");
+				string firstLine = e.ToString().Split('\n')[0];
+				Debug.Log($"[{nameof(AdvertisingIdFetcher)}] Failed to get android advertising ID: {firstLine}");
 			}
 
 			return result;
